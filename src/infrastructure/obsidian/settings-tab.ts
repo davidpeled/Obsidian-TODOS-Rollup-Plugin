@@ -9,17 +9,17 @@ export interface SettingsHost {
 }
 
 export class TodosRollupSettingTab extends PluginSettingTab {
-  constructor(app: App, private plugin: Plugin & SettingsHost) {
-    super(app, plugin);
+  constructor(app: App, private host: Plugin & SettingsHost) {
+    super(app, host);
   }
 
   display(): void {
     const { containerEl } = this;
     containerEl.empty();
-    const s = this.plugin.settings;
+    const s = this.host.settings;
     const save = async () => {
-      await this.plugin.saveSettings();
-      this.plugin.rerenderViews();
+      await this.host.saveSettings();
+      this.host.rerenderViews();
     };
 
     new Setting(containerEl)

@@ -28,7 +28,6 @@ export default class TodosRollupPlugin extends Plugin {
 
     const existing = workspace.getLeavesOfType(VIEW_TYPE_TODOS)[0];
     if (existing) {
-      await workspace.revealLeaf(existing);
       workspace.setActiveLeaf(existing, { focus: true });
       return;
     }
@@ -37,7 +36,7 @@ export default class TodosRollupPlugin extends Plugin {
     const recent = workspace.getMostRecentLeaf();
     const leaf: WorkspaceLeaf = recent && recent.view.getViewType() === "empty" ? recent : workspace.getLeaf("tab");
     await leaf.setViewState({ type: VIEW_TYPE_TODOS, active: true });
-    await workspace.revealLeaf(leaf);
+    workspace.setActiveLeaf(leaf, { focus: true });
   }
 
   rerenderViews() {
