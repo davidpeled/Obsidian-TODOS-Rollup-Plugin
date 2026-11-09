@@ -36,9 +36,10 @@ CI runs the same commands. Please also:
 ## Releasing (maintainers)
 
 1. Update `CHANGELOG.md`.
-2. Run `npm version <x.y.z>`. It updates `package.json`, `manifest.json` and `versions.json` and creates a commit and tag.
-3. Push the commit and the tag (`git push --follow-tags`). The tag must be exactly the version, with no `v` prefix, as Obsidian requires.
-4. The Release workflow builds the plugin and attaches `main.js`, `manifest.json` and `styles.css` to a GitHub release.
+2. Bump the version in a pull request: `npm version <x.y.z> --no-git-tag-version` updates `package.json`, `manifest.json` and `versions.json`.
+3. Merge it. The Release workflow runs on `main`, and if no release for that version exists yet, it builds the plugin, tags the commit with the exact version (no `v` prefix, as Obsidian requires) and publishes a GitHub release with `main.js`, `manifest.json` and `styles.css`.
+
+Merges that don't change the version publish nothing. Once the plugin is listed in the Obsidian community directory, new releases are picked up from GitHub automatically.
 
 ## License
 

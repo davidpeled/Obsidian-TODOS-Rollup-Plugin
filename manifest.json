@@ -5,5 +5,6 @@
   "minAppVersion": "1.4.0",
   "description": "Every todo in your vault in one place, grouped by note and ordered by when the note was last updated.",
   "author": "David Peled",
+  "authorUrl": "https://github.com/davidpeled",
   "isDesktopOnly": false
 }

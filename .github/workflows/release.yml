@@ -1,0 +1,59 @@
+name: Release
+# On every push to main, publish a GitHub release tagged with the version in
+# package.json, unless that tag already exists. Obsidian's community plugin
+# directory picks new versions up from these releases.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: release
+  cancel-in-progress: false
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Read version
+        id: version
+        run: |
+          version=$(node -p "require('./package.json').version")
+          manifest=$(node -p "require('./manifest.json').version")
+          if [ "$version" != "$manifest" ]; then
+            echo "::error::package.json ($version) and manifest.json ($manifest) versions differ. Use 'npm version'."
+            exit 1
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+      - name: Check whether the release exists
+        id: exists
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view "${{ steps.version.outputs.version }}" >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "Release ${{ steps.version.outputs.version }} already exists, nothing to do."
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/setup-node@v4
+        if: steps.exists.outputs.exists == 'false'
+        with:
+          node-version: 24
+          cache: npm
+      - if: steps.exists.outputs.exists == 'false'
+        run: npm ci
+      - if: steps.exists.outputs.exists == 'false'
+        run: npm run check
+      - if: steps.exists.outputs.exists == 'false'
+        run: npm run build
+      - name: Create tag and release
+        if: steps.exists.outputs.exists == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ steps.version.outputs.version }}" main.js manifest.json styles.css \
+            --target "$GITHUB_SHA" \
+            --title "${{ steps.version.outputs.version }}" \
+            --generate-notes

@@ -24,6 +24,14 @@
     "todos"
   ],
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/davidpeled/Obsidian-TODOS-Rollup-Plugin.git"
+  },
+  "homepage": "https://github.com/davidpeled/Obsidian-TODOS-Rollup-Plugin#readme",
+  "bugs": {
+    "url": "https://github.com/davidpeled/Obsidian-TODOS-Rollup-Plugin/issues"
+  },
   "author": "David Peled",
   "devDependencies": {
     "@happy-dom/global-registrator": "^21.0.4",
