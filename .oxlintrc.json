@@ -1,0 +1,151 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": [
+    "typescript",
+    "unicorn",
+    "oxc",
+    "import"
+  ],
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn"
+  },
+  "env": {
+    "browser": true,
+    "es2020": true
+  },
+  "ignorePatterns": [
+    "main.js",
+    "demo-dist",
+    "node_modules"
+  ],
+  "rules": {
+    "eqeqeq": "error",
+    "no-var": "error",
+    "prefer-const": "error",
+    "no-eval": "error",
+    "no-implied-eval": "error",
+    "no-new-func": "error",
+    "no-debugger": "error",
+    "no-console": [
+      "error",
+      {
+        "allow": [
+          "error",
+          "warn"
+        ]
+      }
+    ],
+    "typescript/no-explicit-any": "error",
+    "typescript/consistent-type-imports": "error",
+    "typescript/no-non-null-assertion": "off",
+    "import/no-cycle": "error",
+    "import/no-duplicates": "error",
+    "no-restricted-globals": [
+      "error",
+      {
+        "name": "innerHTML",
+        "message": "Build DOM with h() / textContent."
+      }
+    ],
+    "no-unused-vars": [
+      "error",
+      {
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_"
+      }
+    ],
+    "unicorn/no-array-sort": "off",
+    "import/no-unassigned-import": "off"
+  },
+  "overrides": [
+    {
+      "files": [
+        "src/domain/**",
+        "src/application/**"
+      ],
+      "env": {
+        "browser": false
+      },
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "obsidian",
+                  "**/presentation/**",
+                  "**/infrastructure/**",
+                  "**/demo/**"
+                ],
+                "message": "Domain and application depend on nothing outward."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "src/presentation/**"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "obsidian",
+                  "**/infrastructure/**",
+                  "**/demo/**"
+                ],
+                "message": "Presentation talks to the app through ports; Obsidian lives in infrastructure."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "demo/**"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "obsidian",
+                  "**/infrastructure/obsidian/**",
+                  "**/src/main*"
+                ],
+                "message": "The demo must not depend on the Obsidian adapters."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "**/*.test.ts"
+      ],
+      "rules": {
+        "typescript/no-explicit-any": "off",
+        "no-console": "off"
+      }
+    },
+    {
+      "files": [
+        "scripts/**"
+      ],
+      "rules": {
+        "no-console": "off"
+      }
+    }
+  ]
+}

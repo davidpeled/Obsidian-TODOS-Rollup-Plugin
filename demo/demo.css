@@ -1,0 +1,644 @@
+/* Demo-only chrome. Mimics Obsidian's default theme variables so the
+   plugin's styles.css renders here exactly as it does in the app. */
+
+:root,
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --background-primary: #1e1e1e;
+  --background-primary-alt: #242424;
+  --background-secondary: #262626;
+  --background-secondary-alt: #1a1a1a;
+  --background-modifier-border: #333;
+  --background-modifier-hover: rgba(255, 255, 255, 0.067);
+  --text-normal: #dadada;
+  --text-muted: #a3a3a3;
+  --text-faint: #6b6b6b;
+  --text-accent: #a88bfa;
+  --text-on-accent: #fff;
+  --interactive-accent: #8a5cf5;
+  --text-highlight-bg: rgba(255, 208, 0, 0.3);
+  --color-red: #fb464c;
+  --color-orange: #e9973f;
+  --color-yellow: #e0de71;
+  --color-blue: #4b9bf5;
+  --demo-page: #121212;
+  --demo-bar: rgba(18, 18, 18, 0.8);
+  --demo-frame: #0a0a0a;
+  --demo-shadow: 0 30px 80px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --background-primary: #ffffff;
+  --background-primary-alt: #fafafa;
+  --background-secondary: #f6f6f6;
+  --background-secondary-alt: #ececec;
+  --background-modifier-border: #e3e3e3;
+  --background-modifier-hover: rgba(0, 0, 0, 0.05);
+  --text-normal: #222;
+  --text-muted: #5c5c5c;
+  --text-faint: #a3a3a3;
+  --text-accent: #7852ee;
+  --text-on-accent: #fff;
+  --interactive-accent: #7c4dff;
+  --text-highlight-bg: rgba(255, 208, 0, 0.4);
+  --color-red: #e93147;
+  --color-orange: #ec7500;
+  --color-yellow: #e0ac00;
+  --color-blue: #086ddd;
+  --demo-page: #ebebeb;
+  --demo-bar: rgba(235, 235, 235, 0.8);
+  --demo-frame: #1c1c1c;
+  --demo-shadow: 0 30px 80px rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.06);
+}
+
+:root {
+  --font-interface: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  --font-monospace: ui-monospace, "SF Mono", Menlo, monospace;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  -webkit-tap-highlight-color: transparent;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  overscroll-behavior: none;
+}
+
+body {
+  background: var(--demo-page);
+  color: var(--text-normal);
+  font-family: var(--font-interface);
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 200ms ease;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+#app {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─────────────── top bar ─────────────── */
+
+.demo-bar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 20px;
+  padding-top: max(12px, env(safe-area-inset-top));
+  background: var(--demo-bar);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--background-modifier-border);
+}
+.demo-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.demo-brand strong {
+  font-size: 14px;
+  letter-spacing: -0.01em;
+}
+.demo-logo {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 7px;
+  color: #fff;
+  background: var(--interactive-accent);
+}
+.demo-sub {
+  color: var(--text-muted);
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.demo-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.demo-seg {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--n), 1fr);
+  padding: 2px;
+  border-radius: 8px;
+  background: var(--background-modifier-hover);
+}
+.demo-seg-ind {
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  left: 2px;
+  width: calc((100% - 4px) / var(--n));
+  border-radius: 6px;
+  background: var(--background-primary);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), 0 0 0 0.5px var(--background-modifier-border);
+  transform: translateX(calc(var(--i) * 100%));
+  transition: transform 200ms var(--ease-out);
+}
+.demo-seg-btn {
+  position: relative;
+  appearance: none;
+  border: 0;
+  background: none;
+  height: 28px;
+  padding: 0 12px;
+  font-size: 12.5px;
+  font-weight: 550;
+  color: var(--text-muted);
+  cursor: pointer;
+  user-select: none;
+  transition: color 150ms ease, transform 140ms var(--ease-out);
+}
+.demo-seg-btn[aria-checked="true"] {
+  color: var(--text-normal);
+}
+.demo-seg-btn:active,
+.demo-btn:active {
+  transform: scale(0.97);
+}
+.demo-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 8px;
+  border: 1px solid var(--background-modifier-border);
+  background: var(--background-primary);
+  font-size: 12.5px;
+  font-weight: 550;
+  cursor: pointer;
+  transition: transform 140ms var(--ease-out), background-color 150ms ease;
+}
+
+@media (max-width: 760px) {
+  .demo-sub {
+    display: none;
+  }
+  .demo-bar {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+
+/* ─────────────── stage ─────────────── */
+
+.stage {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  padding: 32px 24px 48px;
+}
+
+/* ─────────────── desktop window ─────────────── */
+
+.window {
+  width: min(1240px, 100%);
+  height: min(820px, calc(100dvh - 140px));
+  min-height: 520px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--background-primary);
+  box-shadow: var(--demo-shadow);
+}
+.titlebar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 14px;
+  background: var(--background-secondary-alt);
+  border-bottom: 1px solid var(--background-modifier-border);
+  flex-shrink: 0;
+}
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+.dot.r { background: #ff5f57; }
+.dot.y { background: #febc2e; }
+.dot.g { background: #28c840; }
+
+.window-body {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+.ribbon {
+  width: 44px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding-top: 8px;
+  background: var(--background-secondary-alt);
+  border-right: 1px solid var(--background-modifier-border);
+}
+.ribbon-btn {
+  appearance: none;
+  border: 0;
+  background: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  display: grid;
+  place-items: center;
+  color: var(--text-faint);
+  cursor: pointer;
+  transition: transform 140ms var(--ease-out), color 150ms ease;
+}
+.ribbon-btn.is-active {
+  color: var(--interactive-accent);
+}
+.ribbon-btn:active {
+  transform: scale(0.94);
+}
+
+.explorer {
+  width: 240px;
+  flex-shrink: 0;
+  overflow-y: auto;
+  padding: 10px 8px;
+  background: var(--background-secondary);
+  border-right: 1px solid var(--background-modifier-border);
+}
+.nav-header {
+  padding: 4px 8px 10px;
+  font-size: 12px;
+  font-weight: 650;
+  color: var(--text-muted);
+}
+.nav-folder-title {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 6px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.nav-chevron {
+  transform: rotate(90deg);
+  color: var(--text-faint);
+}
+.nav-file {
+  display: block;
+  width: 100%;
+  text-align: left;
+  appearance: none;
+  border: 0;
+  background: none;
+  padding: 4px 8px 4px 22px;
+  border-radius: 5px;
+  font-size: 13px;
+  color: var(--text-muted);
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.nav-file:not(.is-nested) {
+  padding-left: 10px;
+}
+.nav-file.is-nested {
+  padding-left: 26px;
+}
+.nav-file.is-active {
+  background: var(--background-modifier-hover);
+  color: var(--text-normal);
+}
+
+.ws {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.ws-tabs {
+  display: flex;
+  gap: 2px;
+  height: 40px;
+  padding: 6px 8px 0;
+  background: var(--background-secondary);
+  border-bottom: 1px solid var(--background-modifier-border);
+  overflow-x: auto;
+  flex-shrink: 0;
+}
+.ws-tab {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  max-width: 200px;
+  padding: 0 8px 0 12px;
+  border-radius: 8px 8px 0 0;
+  font-size: 12.5px;
+  color: var(--text-muted);
+  cursor: pointer;
+  user-select: none;
+  flex-shrink: 0;
+}
+.ws-tab.is-active {
+  background: var(--background-primary);
+  color: var(--text-normal);
+  box-shadow: 0 0 0 1px var(--background-modifier-border);
+  clip-path: inset(-1px -1px 0 -1px);
+}
+.ws-tab-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ws-tab-close {
+  appearance: none;
+  border: 0;
+  background: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  display: grid;
+  place-items: center;
+  color: var(--text-faint);
+  cursor: pointer;
+}
+
+.ws-content {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  background: var(--background-primary);
+  overscroll-behavior: contain;
+}
+.todos-host {
+  min-height: 100%;
+}
+
+/* ─────────────── note editor ─────────────── */
+
+.note-view {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 18px 32px 0;
+}
+.note-crumbs {
+  display: flex;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-faint);
+}
+.note-crumb.is-current {
+  color: var(--text-muted);
+}
+.note-hint {
+  margin: 14px 0 6px;
+  font-size: 12px;
+  color: var(--text-faint);
+}
+.note-editor {
+  flex: 1;
+  width: 100%;
+  resize: none;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--text-normal);
+  font-family: var(--font-interface);
+  font-size: 15px;
+  line-height: 1.65;
+  padding: 0 0 40px;
+}
+.note-editor::selection {
+  background: color-mix(in srgb, var(--interactive-accent) 35%, transparent);
+}
+.ws-content.is-mobile .note-view {
+  padding: 12px 16px 0;
+}
+.ws-content.is-mobile .note-editor {
+  font-size: 16px;
+}
+
+/* ─────────────── phone ─────────────── */
+
+.phone {
+  width: 390px;
+  height: min(844px, calc(100dvh - 120px));
+  min-height: 600px;
+  padding: 11px;
+  border-radius: 56px;
+  background: var(--demo-frame);
+  box-shadow: var(--demo-shadow), inset 0 0 0 1.5px rgba(255, 255, 255, 0.08);
+}
+.phone-screen {
+  position: relative;
+  height: 100%;
+  border-radius: 46px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: var(--background-primary);
+}
+.m-status {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 50px;
+  padding: 6px 30px 0 36px;
+  flex-shrink: 0;
+  font-size: 15px;
+  font-weight: 600;
+  background: var(--background-secondary);
+}
+.m-island {
+  position: absolute;
+  left: 50%;
+  top: 11px;
+  width: 112px;
+  height: 32px;
+  border-radius: 20px;
+  background: #000;
+  transform: translateX(-50%);
+}
+.m-status-icons {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.m-signal {
+  width: 17px;
+  height: 11px;
+  background: linear-gradient(to right, currentColor 0 3px, transparent 3px 4.5px, currentColor 4.5px 7.5px, transparent 7.5px 9px, currentColor 9px 12px, transparent 12px 13.5px, currentColor 13.5px);
+  clip-path: polygon(0 75%, 25% 75%, 25% 50%, 50% 50%, 50% 25%, 75% 25%, 75% 0, 100% 0, 100% 100%, 0 100%);
+}
+.m-battery {
+  width: 25px;
+  height: 12px;
+  border-radius: 4px;
+  border: 1.5px solid currentColor;
+  opacity: 0.9;
+  background: linear-gradient(to right, currentColor 70%, transparent 70%) content-box;
+  padding: 1.5px;
+}
+.m-header {
+  display: grid;
+  grid-template-columns: 44px 1fr 44px;
+  align-items: center;
+  height: 44px;
+  padding: 0 6px;
+  flex-shrink: 0;
+  background: var(--background-secondary);
+  border-bottom: 1px solid var(--background-modifier-border);
+}
+.m-title {
+  text-align: center;
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.m-icon-btn {
+  appearance: none;
+  border: 0;
+  background: none;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  color: var(--text-muted);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: transform 140ms var(--ease-out), opacity 150ms ease;
+}
+.m-icon-btn:active {
+  transform: scale(0.92);
+}
+.m-back .tr-icon {
+  transform: rotate(180deg);
+}
+.m-back:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+.m-toolbar {
+  display: flex;
+  justify-content: space-around;
+  padding: 4px 12px 22px;
+  flex-shrink: 0;
+  background: var(--background-secondary);
+  border-top: 1px solid var(--background-modifier-border);
+}
+.m-home-indicator {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  width: 134px;
+  height: 5px;
+  border-radius: 3px;
+  background: var(--text-normal);
+  opacity: 0.6;
+  transform: translateX(-50%);
+}
+
+/* On a real phone, drop the fake bezel and fill the screen. */
+@media (max-width: 500px) {
+  .stage[data-device="mobile"] {
+    padding: 0;
+    place-items: stretch;
+  }
+  .phone {
+    width: 100%;
+    height: calc(100dvh - 57px);
+    min-height: 0;
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+  .phone-screen {
+    border-radius: 0;
+  }
+  .m-status,
+  .m-home-indicator {
+    display: none;
+  }
+  .m-toolbar {
+    padding-bottom: max(8px, env(safe-area-inset-bottom));
+  }
+  .stage[data-device="desktop"] {
+    padding: 12px;
+  }
+  .stage[data-device="desktop"] .explorer {
+    display: none;
+  }
+}
+
+/* ─────────────── toast ─────────────── */
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: max(24px, env(safe-area-inset-bottom));
+  z-index: 50;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-normal);
+  background: var(--background-primary);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25), 0 0 0 1px var(--background-modifier-border);
+  opacity: 0;
+  transform: translate(-50%, 12px);
+  transition: opacity 220ms var(--ease-out), transform 220ms var(--ease-out);
+}
+.toast.is-in {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .nav-file:hover,
+  .ws-tab:not(.is-active):hover,
+  .ribbon-btn:hover,
+  .ws-tab-close:hover {
+    background: var(--background-modifier-hover);
+    color: var(--text-normal);
+  }
+  .demo-seg-btn:hover {
+    color: var(--text-normal);
+  }
+  .demo-btn:hover {
+    background: var(--background-modifier-hover);
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "id": "todos-rollup",
+  "name": "TODOs rollup",
+  "version": "1.0.0",
+  "minAppVersion": "1.4.0",
+  "description": "Every todo in your vault in one place, grouped by note and ordered by when the note was last updated.",
+  "author": "David Peled",
+  "isDesktopOnly": false
+}

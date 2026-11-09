@@ -1,0 +1,9 @@
+node_modules/
+main.js
+demo-dist/
+.DS_Store
+data.json
+.claude/settings.local.json
+*.log
+.vscode/
+.idea/
