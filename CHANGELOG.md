@@ -4,6 +4,10 @@ All notable changes to this project are documented here. The format is based on 
 
 ## [Unreleased]
 
+## [1.0.2]
+
+- Settings tab no longer reads `Plugin.settings`, which exists only in Obsidian 1.13.0 and newer.
+
 ## [1.0.1]
 
 - Stop using `workspace.revealLeaf`, which needs a newer Obsidian than the declared `minAppVersion`.

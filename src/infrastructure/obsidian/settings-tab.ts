@@ -9,8 +9,13 @@ export interface SettingsHost {
 }
 
 export class TodosRollupSettingTab extends PluginSettingTab {
-  constructor(app: App, private host: Plugin & SettingsHost) {
-    super(app, host);
+  // Typed as SettingsHost only: on `Plugin & SettingsHost`, `.settings` would resolve to
+  // Plugin.settings, which exists only since Obsidian 1.13.0.
+  private readonly host: SettingsHost;
+
+  constructor(app: App, plugin: Plugin & SettingsHost) {
+    super(app, plugin);
+    this.host = plugin;
   }
 
   display(): void {
