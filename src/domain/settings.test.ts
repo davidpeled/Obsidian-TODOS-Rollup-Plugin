@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { DEFAULT_SETTINGS, isExcluded, sanitizeSettings } from "./settings.ts";
+import { DEFAULT_SETTINGS, applySetting, isEditableSettingKey, isExcluded, parseLines, sanitizeSettings, settingToControlValue } from "./settings.ts";
 
 test("sanitizeSettings falls back on missing or wrongly typed data", () => {
   assert.deepEqual(sanitizeSettings(null), DEFAULT_SETTINGS);
@@ -30,4 +30,27 @@ test("isExcluded matches folders, subfolders and names case-insensitively", () =
   assert.equal(isExcluded("TemplatesExtra/x.md", cfg), false);
   assert.equal(isExcluded("Deep/agents.MD", cfg), true);
   assert.equal(isExcluded("Notes/a.md", cfg), false);
+});
+
+test("parseLines trims, drops blanks and optionally strips slashes", () => {
+  assert.deepEqual(parseLines(" a \n\n b.md \n"), ["a", "b.md"]);
+  assert.deepEqual(parseLines("/Archive/\n Notes/Old/ ", true), ["Archive", "Notes/Old"]);
+});
+
+test("applySetting parses list text, clamps numbers and rejects wrong types", () => {
+  const base = DEFAULT_SETTINGS;
+  assert.deepEqual(applySetting(base, "excludedFolders", "/A/\nB").excludedFolders, ["A", "B"]);
+  assert.deepEqual(applySetting(base, "excludedFileNames", " X.md \n").excludedFileNames, ["X.md"]);
+  assert.equal(applySetting(base, "recentNotesCount", 99).recentNotesCount, 12);
+  assert.equal(applySetting(base, "showGreeting", "nope").showGreeting, base.showGreeting);
+  assert.equal(applySetting(base, "showGreeting", false).showGreeting, false);
+});
+
+test("settings round-trip through control values; unknown keys are not editable", () => {
+  const s = { ...DEFAULT_SETTINGS, excludedFolders: ["A", "B/C"] };
+  assert.equal(settingToControlValue(s, "excludedFolders"), "A\nB/C");
+  assert.equal(settingToControlValue(s, "recentNotesCount"), s.recentNotesCount);
+  assert.equal(isEditableSettingKey("openOnStartup"), true);
+  assert.equal(isEditableSettingKey("lastFilter"), false);
+  assert.equal(isEditableSettingKey("bogus"), false);
 });

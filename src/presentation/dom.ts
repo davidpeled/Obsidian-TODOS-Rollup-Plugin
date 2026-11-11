@@ -14,7 +14,7 @@ export function h<K extends keyof HTMLElementTagNameMap>(
   props: Props | null = null,
   ...children: Child[]
 ): HTMLElementTagNameMap[K] {
-  const el = document.createElement(tag);
+  const el = createEl(tag);
   if (props) {
     if (props.class) el.className = props.class;
     if (props.text !== undefined) el.textContent = props.text;
@@ -34,8 +34,6 @@ export function h<K extends keyof HTMLElementTagNameMap>(
   return el;
 }
 
-const SVG_NS = "http://www.w3.org/2000/svg";
-
 /** Lucide-style stroke icons (Obsidian's icon set), inlined so the demo needs no dependency. */
 const ICONS: Record<string, string> = {
   check: "M20 6 9 17l-5-5",
@@ -50,8 +48,8 @@ const ICONS: Record<string, string> = {
   refresh: "M3 12a9 9 0 0 1 15-6.7L21 8M21 3v5h-5M21 12a9 9 0 0 1-15 6.7L3 16M3 21v-5h5",
 };
 
-export function icon(name: keyof typeof ICONS | string, size = 16, cls = ""): SVGSVGElement {
-  const svg = document.createElementNS(SVG_NS, "svg");
+export function icon(name: string, size = 16, cls = ""): SVGSVGElement {
+  const svg = createSvg("svg");
   svg.setAttribute("viewBox", "0 0 24 24");
   svg.setAttribute("width", String(size));
   svg.setAttribute("height", String(size));
@@ -62,13 +60,13 @@ export function icon(name: keyof typeof ICONS | string, size = 16, cls = ""): SV
   svg.setAttribute("stroke-linejoin", "round");
   svg.setAttribute("aria-hidden", "true");
   svg.setAttribute("class", `tr-icon ${cls}`.trim());
-  const path = document.createElementNS(SVG_NS, "path");
+  const path = createSvg("path");
   path.setAttribute("d", ICONS[name] ?? "");
   svg.append(path);
   return svg;
 }
 
-export const wait = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
+export const wait = (ms: number) => new Promise<void>((r) => window.setTimeout(r, ms));
 
 export function prefersReducedMotion(): boolean {
   return typeof matchMedia === "function" && matchMedia("(prefers-reduced-motion: reduce)").matches;

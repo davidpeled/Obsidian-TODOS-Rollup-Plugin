@@ -10,7 +10,7 @@ export const VIEW_TYPE_TODOS = "todos-rollup-view";
 /** What the view needs from the plugin. */
 export interface TodoViewHost {
   settings: TodosRollupSettings;
-  saveSettings(): Promise<void>;
+  saveSettings: () => Promise<boolean>;
 }
 
 /** Composition root for one todo list: wires Obsidian adapters into the application and UI. */

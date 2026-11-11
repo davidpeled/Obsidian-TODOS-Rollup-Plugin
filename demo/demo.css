@@ -53,8 +53,8 @@
 }
 
 :root {
-  --font-interface: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
-  --font-monospace: ui-monospace, "SF Mono", Menlo, monospace;
+  --font-interface: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-monospace: "SF Mono", Menlo, monospace;
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   -webkit-tap-highlight-color: transparent;
 }
@@ -371,7 +371,6 @@ button {
   background: var(--background-primary);
   color: var(--text-normal);
   box-shadow: 0 0 0 1px var(--background-modifier-border);
-  clip-path: inset(-1px -1px 0 -1px);
 }
 .ws-tab-title {
   white-space: nowrap;
@@ -499,8 +498,11 @@ button {
 .m-signal {
   width: 17px;
   height: 11px;
-  background: linear-gradient(to right, currentColor 0 3px, transparent 3px 4.5px, currentColor 4.5px 7.5px, transparent 7.5px 9px, currentColor 9px 12px, transparent 12px 13.5px, currentColor 13.5px);
-  clip-path: polygon(0 75%, 25% 75%, 25% 50%, 50% 50%, 50% 25%, 75% 25%, 75% 0, 100% 0, 100% 100%, 0 100%);
+  background:
+    linear-gradient(currentColor, currentColor) 0 100% / 3px 25% no-repeat,
+    linear-gradient(currentColor, currentColor) 4.5px 100% / 3px 50% no-repeat,
+    linear-gradient(currentColor, currentColor) 9px 100% / 3px 75% no-repeat,
+    linear-gradient(currentColor, currentColor) 13.5px 100% / 3.5px 100% no-repeat;
 }
 .m-battery {
   width: 25px;

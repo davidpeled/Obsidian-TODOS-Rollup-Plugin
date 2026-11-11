@@ -81,7 +81,7 @@ export class TodoPage {
     if (this.destroyed) return;
 
     // Entrance: once per open, short and subtle.
-    requestAnimationFrame(() => this.root.classList.add("is-ready"));
+    window.requestAnimationFrame(() => this.root.classList.add("is-ready"));
 
     // Keep "5m ago" labels honest.
     this.timer = window.setInterval(() => this.tick(header.renderTitle), 60_000);

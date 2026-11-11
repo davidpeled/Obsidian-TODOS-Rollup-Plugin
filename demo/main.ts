@@ -1,3 +1,4 @@
+import "../src/test-support/obsidian-shim.ts";
 import "../styles.css";
 import "./demo.css";
 import { TodoBoard } from "../src/application/todo-board.ts";
@@ -16,7 +17,7 @@ const vault = new DemoVault();
 const store = {
   get<T extends string>(k: string, fallback: T, ok: readonly T[]): T {
     try {
-      const v = localStorage.getItem(`tr-demo:${k}`) as T | null;
+      const v = window.localStorage.getItem(`tr-demo:${k}`) as T | null;
       return v !== null && ok.includes(v) ? v : fallback;
     } catch {
       return fallback;
@@ -24,7 +25,7 @@ const store = {
   },
   set(k: string, v: string) {
     try {
-      localStorage.setItem(`tr-demo:${k}`, v);
+      window.localStorage.setItem(`tr-demo:${k}`, v);
     } catch {
       /* private mode */
     }
@@ -304,7 +305,7 @@ function noteView(tab: Extract<Tab, { kind: "note" }>): HTMLElement {
   });
   editor.value = n.content;
 
-  requestAnimationFrame(() => {
+  window.requestAnimationFrame(() => {
     if (tab.line === undefined) return;
     const lines = n.content.split("\n");
     const start = lines.slice(0, tab.line).reduce((s, l) => s + l.length + 1, 0);
@@ -476,7 +477,7 @@ function toast(message: string) {
   toastEl = h("div", { class: "toast", attrs: { role: "status" }, text: message });
   document.body.append(toastEl);
   const el = toastEl;
-  requestAnimationFrame(() => el.classList.add("is-in"));
+  window.requestAnimationFrame(() => el.classList.add("is-in"));
   window.clearTimeout(toastTimer);
   toastTimer = window.setTimeout(() => {
     el.classList.remove("is-in");

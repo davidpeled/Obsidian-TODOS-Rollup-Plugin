@@ -10,6 +10,7 @@ let TodoPage: typeof TodoPageClass;
 
 before(async () => {
   GlobalRegistrator.register();
+  await import("../test-support/obsidian-shim.ts");
   (globalThis as any).matchMedia = () => ({ matches: true }); // reduced motion: no animation delays
   ({ TodoPage } = await import("./todo-page.ts"));
 });

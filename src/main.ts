@@ -1,4 +1,4 @@
-import { Plugin, type WorkspaceLeaf } from "obsidian";
+import { Notice, Plugin, type WorkspaceLeaf } from "obsidian";
 import { DEFAULT_SETTINGS, sanitizeSettings, type TodosRollupSettings } from "./domain/settings.ts";
 import { TodoView, VIEW_TYPE_TODOS } from "./infrastructure/obsidian/todo-view.ts";
 import { TodosRollupSettingTab } from "./infrastructure/obsidian/settings-tab.ts";
@@ -49,11 +49,14 @@ export default class TodosRollupPlugin extends Plugin {
     this.settings = sanitizeSettings(await this.loadData());
   }
 
-  async saveSettings() {
+  async saveSettings(): Promise<boolean> {
     try {
       await this.saveData(this.settings);
+      return true;
     } catch (e) {
       console.error("[todos-rollup] failed to save settings", e);
+      void new Notice("Todos rollup: could not save settings.");
+      return false;
     }
   }
 }

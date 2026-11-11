@@ -51,3 +51,10 @@ test("no innerHTML / outerHTML / insertAdjacentHTML anywhere", () => {
   for (const f of [...sources("src"), ...sources("demo")])
     assert.doesNotMatch(readFileSync(f, "utf8"), /\b(innerHTML|outerHTML|insertAdjacentHTML)\b/, f);
 });
+
+test("test-support helpers are only used by tests and the demo", () => {
+  const offenders = sources("src")
+    .filter((f) => !f.startsWith("src/test-support/"))
+    .filter((f) => importsOf(readFileSync(f, "utf8")).some((spec) => /test-support/.test(spec)));
+  assert.deepEqual(offenders, []);
+});
