@@ -25,6 +25,10 @@ jobs:
             echo "::error::package.json ($version) and manifest.json ($manifest) versions differ. Use 'npm version'."
             exit 1
           fi
+          if ! node -e "process.exit(require('./versions.json')['$version'] ? 0 : 1)"; then
+            echo "::error::versions.json has no entry for $version. Use 'npm version'."
+            exit 1
+          fi
           echo "version=$version" >> "$GITHUB_OUTPUT"
       - name: Check whether the release exists
         id: exists
