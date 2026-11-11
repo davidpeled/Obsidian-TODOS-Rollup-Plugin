@@ -55,3 +55,42 @@ export function isExcluded(
   if (excludedFileNames.some((n) => n.toLowerCase() === name)) return true;
   return excludedFolders.some((f) => path === f || path.startsWith(f + "/"));
 }
+
+/** One entry per line, trimmed, blanks dropped. With `trimSlashes`, leading/trailing `/` are removed (folder paths). */
+export function parseLines(text: string, trimSlashes = false): string[] {
+  return text
+    .split("\n")
+    .map((x) => (trimSlashes ? x.trim().replace(/^\/+|\/+$/g, "") : x.trim()))
+    .filter(Boolean);
+}
+
+/** Settings editable from the settings tab (everything except internal state like `lastFilter`). */
+export const EDITABLE_SETTING_KEYS = [
+  "openOnStartup",
+  "openNotesInNewTab",
+  "showGreeting",
+  "showRecentNotes",
+  "recentNotesCount",
+  "excludedFolders",
+  "excludedFileNames",
+] as const satisfies readonly (keyof TodosRollupSettings)[];
+
+export type EditableSettingKey = (typeof EDITABLE_SETTING_KEYS)[number];
+
+export const isEditableSettingKey = (key: string): key is EditableSettingKey =>
+  (EDITABLE_SETTING_KEYS as readonly string[]).includes(key);
+
+/** Settings as shown in a text control: list settings become one entry per line. */
+export function settingToControlValue(settings: TodosRollupSettings, key: EditableSettingKey): boolean | number | string {
+  const v = settings[key];
+  return Array.isArray(v) ? v.join("\n") : v;
+}
+
+/** Apply one control value. Text for the list settings is parsed into lines; the result is always sanitized. */
+export function applySetting(settings: TodosRollupSettings, key: EditableSettingKey, value: unknown): TodosRollupSettings {
+  const next: Record<string, unknown> = { ...settings };
+  if (key === "excludedFolders") next[key] = parseLines(String(value), true);
+  else if (key === "excludedFileNames") next[key] = parseLines(String(value));
+  else next[key] = value;
+  return sanitizeSettings(next);
+}

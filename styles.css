@@ -24,13 +24,13 @@
 
   container-type: inline-size;
   color: var(--tr-text);
-  font-family: var(--font-interface, system-ui, sans-serif);
+  font-family: var(--font-interface, sans-serif);
   -webkit-tap-highlight-color: transparent;
   min-height: 100%;
 }
 
-.tr-view {
-  padding: 0 !important;
+div.view-content.tr-view {
+  padding: 0;
 }
 
 .tr-page {
@@ -212,13 +212,16 @@
   transform: translateX(calc(var(--seg-index) * 100%));
   transition: transform 220ms var(--tr-ease-out);
 }
-.tr-seg-btn {
+button.tr-seg-btn,
+.tr-root button.tr-seg-btn:hover,
+.tr-root button.tr-seg-btn:active,
+.tr-root button.tr-seg-btn:focus {
   position: relative;
   z-index: 1;
   appearance: none;
   border: 0;
-  background: transparent !important;
-  box-shadow: none !important;
+  background: transparent;
+  box-shadow: none;
   height: 30px;
   padding: 0 10px;
   border-radius: 7px;
@@ -269,15 +272,17 @@
 .tr-search:focus-within {
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--tr-accent) 45%, transparent);
 }
-.tr-root .tr-search-input {
+.tr-root input.tr-search-input,
+.tr-root input.tr-search-input:hover,
+.tr-root input.tr-search-input:focus {
   flex: 1;
   min-width: 0;
   height: 100%;
   padding: 0;
-  border: 0 !important;
+  border: 0;
   outline: none;
-  background: transparent !important;
-  box-shadow: none !important;
+  background: transparent;
+  box-shadow: none;
   font: inherit;
   font-size: 14px;
   color: var(--tr-text);
@@ -287,7 +292,9 @@
 }
 /* iOS zooms into inputs under 16px. */
 @media (pointer: coarse) {
-  .tr-root .tr-search-input {
+  .tr-root input.tr-search-input,
+.tr-root input.tr-search-input:hover,
+.tr-root input.tr-search-input:focus {
     font-size: 16px;
   }
 }
@@ -334,7 +341,9 @@
   border-bottom-color: transparent;
 }
 
-.tr-collapse {
+.tr-root button.tr-collapse,
+.tr-root button.tr-collapse:hover,
+.tr-root button.tr-collapse:active {
   appearance: none;
   flex-shrink: 0;
   display: grid;
@@ -344,8 +353,8 @@
   padding: 0;
   border: 0;
   border-radius: 6px;
-  background: transparent !important;
-  box-shadow: none !important;
+  background: transparent;
+  box-shadow: none;
   color: var(--tr-faint);
   cursor: pointer;
   touch-action: manipulation;
@@ -371,11 +380,15 @@
   align-items: baseline;
   gap: 8px;
 }
-.tr-note-title {
+.tr-root a.tr-note-title,
+.tr-root a.tr-note-title:hover {
   font-size: 14.5px;
   font-weight: 600;
-  color: var(--tr-text) !important;
-  text-decoration: none !important;
+  color: var(--tr-text);
+  --link-decoration: none;
+  --link-decoration-hover: none;
+  --link-external-decoration: none;
+  --link-external-decoration-hover: none;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -463,7 +476,9 @@
   padding: 7px 14px 7px calc(16px + var(--depth, 0) * 26px);
 }
 
-.tr-check {
+.tr-root button.tr-check,
+.tr-root button.tr-check:hover,
+.tr-root button.tr-check:active {
   appearance: none;
   flex-shrink: 0;
   position: relative;
@@ -473,8 +488,8 @@
   padding: 0;
   border-radius: 6px;
   border: 1.5px solid var(--tr-faint);
-  background: transparent !important;
-  box-shadow: none !important;
+  background: transparent;
+  box-shadow: none;
   color: var(--tr-on-accent);
   display: grid;
   place-items: center;
@@ -495,8 +510,8 @@
 .tr-check:active {
   transform: scale(0.9);
 }
-.tr-check[aria-checked="true"] {
-  background: var(--tr-accent) !important;
+.tr-root button.tr-check[aria-checked="true"] {
+  background: var(--tr-accent);
   border-color: var(--tr-accent);
 }
 .tr-check-icon {
@@ -546,23 +561,23 @@
   color: var(--tr-text);
   overflow-wrap: anywhere;
   cursor: pointer;
-  text-decoration-line: line-through;
-  text-decoration-color: transparent;
-  text-decoration-thickness: 1.5px;
+  background: linear-gradient(var(--tr-faint), var(--tr-faint)) no-repeat 0 58% / 0 1.5px;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
   transition:
     color 200ms ease,
-    text-decoration-color 200ms ease;
+    background-size 200ms ease;
 }
 .tr-task:is([data-status="done"], [data-status="cancelled"]) .tr-task-text {
   color: var(--tr-faint);
-  text-decoration-color: var(--tr-faint);
+  background-size: 100% 1.5px;
 }
 .tr-task[data-status="in-progress"] .tr-check {
   border-style: dashed;
 }
 
 .tr-task-text code {
-  font-family: var(--font-monospace, ui-monospace, monospace);
+  font-family: var(--font-monospace, monospace);
   font-size: 0.88em;
   padding: 1px 5px;
   border-radius: 5px;
@@ -574,11 +589,16 @@
   border-radius: 3px;
   padding: 0 2px;
 }
-.tr-link {
-  color: var(--text-accent, var(--tr-accent)) !important;
-  text-decoration: none;
+.tr-root a.tr-link {
+  color: var(--text-accent, var(--tr-accent));
+  --link-decoration: none;
+  --link-decoration-hover: none;
+  --link-external-decoration: none;
+  --link-external-decoration-hover: none;
 }
-.tr-tag {
+.tr-root button.tr-tag,
+.tr-root button.tr-tag:hover,
+.tr-root button.tr-tag:active {
   appearance: none;
   border: 0;
   padding: 0 7px;
@@ -589,14 +609,14 @@
   font-size: 0.86em;
   line-height: 1.55;
   color: var(--tag-color, var(--tr-accent));
-  background: var(--tag-background, color-mix(in srgb, var(--tr-accent) 12%, transparent)) !important;
-  box-shadow: none !important;
+  background: var(--tag-background, color-mix(in srgb, var(--tr-accent) 12%, transparent));
+  box-shadow: none;
   cursor: pointer;
   vertical-align: baseline;
   touch-action: manipulation;
   transition: transform 140ms var(--tr-ease-out);
 }
-.tr-tag:active {
+.tr-root button.tr-tag:active {
   transform: scale(0.96);
 }
 
@@ -659,7 +679,7 @@
   max-width: 40ch;
 }
 .tr-empty-body code {
-  font-family: var(--font-monospace, ui-monospace, monospace);
+  font-family: var(--font-monospace, monospace);
   font-size: 0.9em;
   padding: 1px 5px;
   border-radius: 5px;
@@ -696,7 +716,8 @@
   }
 }
 
-.tr-recent-card {
+.tr-root a.tr-recent-card,
+.tr-root a.tr-recent-card:hover {
   display: flex;
   align-items: flex-start;
   gap: 10px;
@@ -704,8 +725,11 @@
   border-radius: 10px;
   border: 1px solid var(--tr-border);
   background: var(--tr-surface);
-  color: var(--tr-text) !important;
-  text-decoration: none !important;
+  color: var(--tr-text);
+  --link-decoration: none;
+  --link-decoration-hover: none;
+  --link-external-decoration: none;
+  --link-external-decoration-hover: none;
   min-width: 0;
   user-select: none;
   touch-action: manipulation;
@@ -713,18 +737,18 @@
     background-color 150ms ease,
     transform 140ms var(--tr-ease-out);
 }
-.tr-recent-card:active {
+.tr-root a.tr-recent-card:active {
   transform: scale(0.98);
 }
 @container (max-width: 520px) {
-  .tr-recent-card {
+  .tr-root a.tr-recent-card {
     border: 0;
     border-radius: 0;
   }
-  .tr-recent-card + .tr-recent-card {
+  .tr-root a.tr-recent-card + a.tr-recent-card {
     border-top: 1px solid var(--tr-border);
   }
-  .tr-recent-card:active {
+  .tr-root a.tr-recent-card:active {
     transform: none;
     background: var(--tr-hover);
   }
@@ -763,23 +787,23 @@
   .tr-seg-btn:hover {
     color: var(--tr-text);
   }
-  .tr-collapse:hover {
+  .tr-root button.tr-collapse:hover {
     color: var(--tr-text);
-    background: var(--tr-hover) !important;
+    background: var(--tr-hover);
   }
-  .tr-note-title:hover {
-    color: var(--tr-accent) !important;
+  .tr-root a.tr-note-title:hover {
+    color: var(--tr-accent);
   }
   .tr-task-inner:hover {
     background: var(--tr-hover);
   }
-  .tr-check:hover {
+  .tr-root button.tr-check:hover {
     border-color: var(--tr-accent);
   }
   .tr-task-text:hover .tr-link {
-    text-decoration: underline;
+    box-shadow: 0 1px 0 currentColor;
   }
-  .tr-recent-card:hover {
+  .tr-root a.tr-recent-card:hover {
     background: var(--tr-hover);
   }
 }
