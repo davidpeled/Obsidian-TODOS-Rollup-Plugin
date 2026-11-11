@@ -1,6 +1,6 @@
 {
   "name": "obsidian-todos-rollup",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Every todo in your Obsidian vault in one place, grouped by the note it lives in and ordered by when that note was last updated. Works on desktop and mobile.",
   "main": "main.js",
   "type": "module",
